@@ -1,20 +1,45 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Sample Site</title>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="sort.js"></script>
+    <script type="text/javascript" src="main_script.js"></script>
+
     <style>
-        body { padding-top:50px; }
+        body {
+            padding-top: 50px;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
-        <div class="jumbotron">
-            <h1>res.sendFile() Works!</h1>
-        </div>
-    </div>
+        <form class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <input type="number" class="form-control" id="total-rows">
+            </div>
+            <button id="load-data-btn" type="button" class="btn btn-primary mb-2" onclick="loadData()">Load data</button>
+            <button id="render-btn" type="button" class="btn btn-primary mb-2" onclick="render()">Sort and render</button>
+            <button id="render-by-worker-btn" type="button" class="btn btn-primary mb-2" onclick="renderByWorker()">Sort and render by worker</button>
+        </form>
 
+        <div class="col-xs-4" style="max-height: 800px; overflow: scroll;">
+            <table class="table bordered-table" id="normal-table"></table>
+        </div>
+
+        <!-- <div class="col-xs-4" style="max-height: 800px; overflow: scroll;">
+            <table class="table bordered-table" id="timeout-table"></table>
+        </div> -->
+
+        <div class="col-xs-4" style="max-height: 800px; overflow: scroll;">
+            <table class="table bordered-table" id="worker-table"></table>
+        </div>
+
+    </div>
 </body>
+
 </html>
