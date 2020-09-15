@@ -1,13 +1,8 @@
-importScripts('sort.js');
+import {bubbleSort} from './sort.js';
+
 onmessage = (e) => {
-    // const data = bubbleSort(e.data);
-    console.log('data', e.data);
-    const data = quickSort(e.data, 0, e.data.length - 1);
-    console.log('sorted data', data);
-    postMessage(data);
-    // while (data.length > 0) {
-    //     let minIndex = findMin(data);
-    //     postMessage({number: data[minIndex], last: data.length === 1});
-    //     data.splice(minIndex, 1);
-    // }
+    const data = e.data;
+    const keyword = e.keyword;
+    const filtered = data.filter((element) => element.name.first.includes(value) || element.name.last.includes(value))
+    postMessage(filtered);
 };

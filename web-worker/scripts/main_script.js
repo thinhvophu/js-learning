@@ -1,55 +1,53 @@
-let numbers = [];
+const { fromEvent } = rxjs;
+const { map, filter, debounceTime } = rxjs.operators;
 
-function render() {
-    const data = [...numbers];
-    console.log('data', data);
-    renderTable(document.getElementById('normal-table'), data);
-}
+import * as Table from './table.js';
 
-function renderTable(table, data) {
-    console.time('Render table')
-    table.innerHTML = "";
+const dataTable = document.getElementById('data-table');
+const totalNum = document.getElementById('total-num');
 
-    const result = bubbleSort(data);
-    // while (data.length > 0) {
-    //     let minIndex = findMin(data);
-    //     // insertRow(table, data[minIndex]);
-    //     data.splice(minIndex, 1);
-    // }
-    console.timeEnd('Render table')
-}
+let data = [];
+document.addEventListener('DOMContentLoaded', function (e) {
+    let request = new XMLHttpRequest();
 
-function insertRow(table, data) {
-    let row = table.insertRow(0);
-    let cell1 = row.insertCell(0);
-    cell1.innerHTML = data
-}
-
-function loadData() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            numbers = JSON.parse(xhttp.responseText);
-            console.log('done');
+    request.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            data = JSON.parse(request.responseText);
+            console.log('data', data);
+            totalNum.innerText = data.length + ' rows';
+            Table.renderTable(dataTable, data);
         }
-    };
+    }
 
-    const value = document.getElementById('total-rows').value;
-    xhttp.open('GET', `/api/table-rows?totalRows=${value}`, true);
-    xhttp.send();
-}
+    request.open('GET', '/api/data', true);
+    request.send();
+});
 
-const worker = new Worker('web-worker.js');
+let worker;
 
-worker.onmessage = (e) => {
-    // const workerTable = document.getElementById('worker-table');
-    // insertRow(workerTable, e.data.number);
-    console.timeEnd('render by worker');
-}
+const useWorkerCheckBox = document.getElementById('use-worker');
+const filterBox = document.getElementById('filter-box');
+fromEvent(filterBox, 'keyup')
+    .subscribe(() => {
+        const useWorker = useWorkerCheckBox.nodeValue;
+        const value = filterBox.value;
+        if (useWorker) {
+            console.log('Filter data using worker, keyword: ', value);
+            if (worker) {
+                worker.terminate();
+            }
 
-function renderByWorker() {
-    console.time('render by worker');
-    // const workerTable = document.getElementById('worker-table');
-    // workerTable.innerHTML = "";
-    worker.postMessage(numbers);
-}
+            worker = new Worker('./web-worker.js', { type: 'module' });
+            worker.onmessage = function (e) {
+                totalNum.innerText = filtered.length + ' rows';    
+                Table.renderTable(dataTable, e.data);
+            }
+
+            worker.postMessage({ data: data, keyword: value });
+        } else {
+            console.log('Filter data, keyword: ', value);
+            const filtered = data.filter((element) => element.name.first.includes(value) || element.name.last.includes(value));
+            totalNum.innerText = filtered.length + 'rows';
+            Table.renderTable(dataTable, filtered);
+        }
+    });

@@ -9,6 +9,7 @@
   "author": "thinh.voph@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "rxjs": "^6.6.3"
   }
 }

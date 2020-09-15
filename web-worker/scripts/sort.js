@@ -1,3 +1,5 @@
+export { quickSort, bubbleSort };
+
 const bubbleSort = (arr) => {
 
     var len = arr.length,
@@ -14,23 +16,6 @@ const bubbleSort = (arr) => {
     return arr;
 }
 
-function findMin(arr) {
-    if (arr.length === 0) {
-        return -1;
-    }
-
-    var min = arr[0];
-    var minIndex = 0;
-
-    for (var i = 1; i < arr.length; i++) {
-        if (arr[i] < min) {
-            minIndex = i;
-            min = arr[i];
-        }
-    }
-
-    return minIndex;
-}
 function swap(arr, firstIndex, secondIndex) {
     var temp = arr[firstIndex];
     arr[firstIndex] = arr[secondIndex];
@@ -38,9 +23,9 @@ function swap(arr, firstIndex, secondIndex) {
 }
 
 function partition(items, left, right) {
-    var pivot   = items[Math.floor((right + left) / 2)], //middle element
-        i       = left, //left pointer
-        j       = right; //right pointer
+    var pivot = items[Math.floor((right + left) / 2)], //middle element
+        i = left, //left pointer
+        j = right; //right pointer
     while (i <= j) {
         while (items[i] < pivot) {
             i++;
@@ -57,17 +42,18 @@ function partition(items, left, right) {
     return i;
 }
 
-function quickSort(items, left, right) {
+const quickSort = (items, left, right) => {
     var index;
     if (items.length > 1) {
-        index = partition(items, left, right); //index returned from partition
-        if (left < index - 1) { //more elements on the left side of the pivot
+        index = partition(items, left, right);
+        if (left < index - 1) {
             quickSort(items, left, index - 1);
         }
-        if (index < right) { //more elements on the right side of the pivot
+        if (index < right) {
             quickSort(items, index, right);
         }
     }
-    // console.log(items);
+
     return items;
 }
+

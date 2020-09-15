@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Sample Site</title>
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <script type="text/javascript" src="sort.js"></script>
-    <script type="text/javascript" src="main_script.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://unpkg.com/rxjs@6.6.3/bundles/rxjs.umd.min.js"></script>
+    <script type="module" src="main_script.js"></script>
 
     <style>
         body {
@@ -18,27 +18,30 @@
 <body>
 
     <div class="container">
-        <form class="form-inline">
-            <div class="form-group mx-sm-3 mb-2">
-                <input type="number" class="form-control" id="total-rows">
+        <div class="row">
+            <form class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control" id="filter-box">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="use-worker">
+                    <label class="form-check-label" for="use-worker">Use worker</label>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12 col-lg-12" style="max-height: 500px; overflow-y: scroll;">
+                <div id="loading-spinner" class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    </div>
+                </div>
+                <table class="table bordered-table" id="data-table"></table>
             </div>
-            <button id="load-data-btn" type="button" class="btn btn-primary mb-2" onclick="loadData()">Load data</button>
-            <button id="render-btn" type="button" class="btn btn-primary mb-2" onclick="render()">Sort and render</button>
-            <button id="render-by-worker-btn" type="button" class="btn btn-primary mb-2" onclick="renderByWorker()">Sort and render by worker</button>
-        </form>
-
-        <div class="col-xs-4" style="max-height: 800px; overflow: scroll;">
-            <table class="table bordered-table" id="normal-table"></table>
+            <div class="pull-right" id="total-num"></div>
         </div>
-
-        <!-- <div class="col-xs-4" style="max-height: 800px; overflow: scroll;">
-            <table class="table bordered-table" id="timeout-table"></table>
-        </div> -->
-
-        <div class="col-xs-4" style="max-height: 800px; overflow: scroll;">
-            <table class="table bordered-table" id="worker-table"></table>
-        </div>
-
     </div>
 </body>
 
