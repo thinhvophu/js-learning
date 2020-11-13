@@ -7,9 +7,8 @@ router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-
-router.get('/api/data', function (req, res) {
-  res.sendFile(path.join(__dirname + '/json/data.json'));
+router.get('/sort', function (req, res) {
+  res.sendFile(path.join(__dirname + '/sort.html'));
 });
 
 app.listen(8000, () => {

@@ -1,0 +1,56 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Site</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://unpkg.com/rxjs@6.6.3/bundles/rxjs.umd.min.js"></script>
+    <script type="module" src="sort/main_script.js"></script>
+
+    <style>
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row mt-2 mb-2">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="data-size">Data size: </label>
+                <input type="number" value="10000" class="form-control" id="data-size">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-primary ml-2" id="generate-button">
+                    Generate
+                </button>
+                <button type="button" class="btn btn-outline-primary ml-2" id="sort-button">
+                    Sort
+                </button>
+                <button type="button" class="btn btn-outline-primary ml-2" id="sort-by-worker-button">
+                    Sort by worker
+                </button>
+            </div>
+            <div>
+                Elapsed time: <span id="count">0</span> second (s)
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-12" id="generated-data">
+        </div>
+        <div id="loading-spinner" class="progress" style="visibility: hidden; width: 100%">
+            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                 role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
