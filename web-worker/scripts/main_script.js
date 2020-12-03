@@ -2,21 +2,18 @@ let numbers = [];
 
 function render() {
     const data = [...numbers];
-    console.log('data', data);
-    renderTable(document.getElementById('normal-table'), data);
+    const table = document.getElementById('normal-table');
+    for (let i = 0; i < data.length; i++) {
+        insertRow(table, data[i]);
+    }
 }
 
-function renderTable(table, data) {
-    console.time('Render table')
-    table.innerHTML = "";
-
-    const result = bubbleSort(data);
-    // while (data.length > 0) {
-    //     let minIndex = findMin(data);
-    //     // insertRow(table, data[minIndex]);
-    //     data.splice(minIndex, 1);
-    // }
-    console.timeEnd('Render table')
+function renderWithSetTimeout() {
+    const data = [...numbers];
+    const table = document.getElementById('worker-table');
+    for (let i = 0; i < data.length; i++) {
+        setTimeout(()=>insertRow(table, data[i]), 0);
+    }
 }
 
 function insertRow(table, data) {
@@ -28,7 +25,7 @@ function insertRow(table, data) {
 function loadData() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             numbers = JSON.parse(xhttp.responseText);
             console.log('done');
         }
@@ -39,17 +36,3 @@ function loadData() {
     xhttp.send();
 }
 
-const worker = new Worker('web-worker.js');
-
-worker.onmessage = (e) => {
-    // const workerTable = document.getElementById('worker-table');
-    // insertRow(workerTable, e.data.number);
-    console.timeEnd('render by worker');
-}
-
-function renderByWorker() {
-    console.time('render by worker');
-    // const workerTable = document.getElementById('worker-table');
-    // workerTable.innerHTML = "";
-    worker.postMessage(numbers);
-}
