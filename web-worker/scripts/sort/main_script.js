@@ -1,34 +1,13 @@
 let data = [];
 
-// for generate data
+// generate data
 const dataSizeInput = document.getElementById('data-size');
 const generateButton = document.getElementById('generate-button');
 generateButton.addEventListener('click', function () {
     generateData(dataSizeInput.value)
 });
 
-function generateData(dataSize) {
-    hideData();
-    for (let i = 0; i < dataSize; i++) {
-        data[i] = Math.floor(Math.random() * dataSize);
-    }
-
-    displayData(data);
-}
-function displayData(data) {
-    if (data) {
-        document.getElementById('generated-data').innerText = data.join(", ");
-    }
-    else {
-        document.getElementById('generated-data').innerText = "";
-    }
-}
-
-function hideData() {
-    displayData();
-}
-
-// for worker
+// worker
 let elapsedTimeInterval;
 const workerTimeLabel = 'WorkerSortTime';
 
@@ -40,17 +19,26 @@ worker.onmessage = function (e) {
     console.timeEnd(workerTimeLabel);
 };
 
-// for sort buttons
+// sort buttons
 const sortButton = document.getElementById('sort-button');
 const sortByWorkerButton = document.getElementById('sort-by-worker-button');
 
 sortButton.addEventListener('click', sort, false);
 sortByWorkerButton.addEventListener('click', function () {
-    sortByWorker(true)
+    sortByWorker(false)
+    // sortByWorker(true)
 });
 
 function sortByWorker(useTypedArray) {
     console.time(workerTimeLabel);
+
+    const worker = new Worker('/sort/sort-worker.js', { type: 'module' });
+    worker.onmessage = function (e) {
+        displayData(e.data);
+        toggleProgressBar(false);
+        clearInterval(elapsedTimeInterval);
+        console.timeEnd(workerTimeLabel);
+    };
 
     toggleProgressBar(true);
     hideData();
@@ -86,7 +74,7 @@ function sort() {
     console.timeEnd(timerLabel);
 }
 
-// ui stuff and sort method
+// ui stuff and bubble sort method
 function toggleProgressBar(show) {
     const progressBar = document.getElementById('loading-spinner');
     if (show) {
@@ -123,4 +111,26 @@ function swap(arr, firstIndex, secondIndex) {
     let temp = arr[firstIndex];
     arr[firstIndex] = arr[secondIndex];
     arr[secondIndex] = temp;
+}
+
+function generateData(dataSize) {
+    hideData();
+    for (let i = 0; i < dataSize; i++) {
+        data[i] = Math.floor(Math.random() * dataSize);
+    }
+
+    displayData(data);
+}
+
+function displayData(data) {
+    if (data) {
+        document.getElementById('generated-data').innerText = data.join(", ");
+    }
+    else {
+        document.getElementById('generated-data').innerText = "";
+    }
+}
+
+function hideData() {
+    displayData();
 }
